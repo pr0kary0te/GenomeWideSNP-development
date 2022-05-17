@@ -5,6 +5,10 @@
 # The logic is that candidate SNPs and their flanking sequence can then be BWA mapped to this file, and any that have a match must have more than one genome
 #match - given that their canonical position has been masked out. This will act as a high copy filter for potential SNPs.
 
+#Edit the path to the location of the IWGSC version 1.0 chromosomes.  This directory must be writable   
+$path = "/data2/gary/IWGSCR_chromosomes_fasta/";
+
+
 $upstream = 10;
 $length = 21;
 $string = "N" x 21;
@@ -28,8 +32,8 @@ close GEN;
 
 $chr =~ s/chr//;
 #Check the path here points to your IWGSC chromosome files
-open(CHR, "/data2/gary/IWGSCR_chromosomes_fasta/$chr.fa");
-open(OUT, ">/data2/gary/IWGSCR_chromosomes_fasta/$chr.masked.fa");
+open(CHR, "$path/$chr.fa");
+open(OUT, ">$path/$chr.masked.fa");
 
 $head = <CHR>; print OUT "$head";
 
@@ -51,7 +55,7 @@ $post = substr($sequence, ($pos - $upstream -1), $length);
 
 print OUT "$sequence\n";
 
-$file = "/data2/gary/IWGSCR_chromosomes_fasta/$chr.masked.fa";
+$file = "$path/$chr.masked.fa";
 if(-e "$file.sa"){print "$file.sa exists skipping indexing\n"; }
-else{ `bwa index /data2/gary/IWGSCR_chromosomes_fasta/$chr.masked.fa`;}
+else{ `bwa index $path/$chr.masked.fa`;}
 
