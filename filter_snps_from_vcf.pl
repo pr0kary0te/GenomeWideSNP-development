@@ -1,10 +1,10 @@
 #!/usr/bin/perl
 
 
-#First load poistions of SNPs from other sources and make sure these are selected.
+#First load poistions of SNPs from other sources and make sure these are selected at this first stage if they overlap.
 
 
-@files = ("susanne-and-marks-snps.csv","cerealsdb_SNPs_from_ensembl.txt","chris-burts-additional-markers.csv");
+@files = ("dart-snps.csv","cerealsdb_SNPs_from_ensembl.txt","breeders-additional-markers.csv");
 foreach $file(@files)
 {
 open(IN, "$file");
