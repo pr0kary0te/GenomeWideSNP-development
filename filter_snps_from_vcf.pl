@@ -5,6 +5,15 @@
 
 
 @files = ("dart-snps.csv","cerealsdb_SNPs_from_ensembl.txt","breeders-additional-markers.csv");
+
+#The format of these csv files should be as per the example in the first three lines shown here:
+
+#Chromosome (IWGSC v1),Position (IWGSC v1),35K_SNPId,Sequence
+#chr1A,1174865,AX-94493709,AGGAGTGATGTATCTGAAAATCTCGAGGGAGCTGA[A/G]ACCCAAGCTTCACAAGAACCTCCTGAGTTTCTGAA
+#chr1A,1236448,AX-94772289,GCTCGGTCGTCTTCGGCCTTGCGACCAAGCATGAT[C/T]TGGTGGATGGCAGGATGAAGAGGTGGTACCTCAGG
+
+
+
 foreach $file(@files)
 {
 open(IN, "$file");
