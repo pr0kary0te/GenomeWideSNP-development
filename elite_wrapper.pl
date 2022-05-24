@@ -118,7 +118,7 @@ if($section{3}>0)
   
 
 #This script will only filter out SNPs with flanks mapping to >1 locus in the cnaonical chromosome so is less severe
-$out = `./filter_out_high_copy_snps.pl $name`;
+$out = `./filter_out_high_copy_snps.pl $name $iwgscpath`;
 print "$out\n";
 
 }
@@ -136,7 +136,10 @@ if($section{4}>0)
 #Comment out the line below to blast against only the canonical chromosome, otherwise the blast will be to an alias file containing all three homeologs 
 $chromosome =~ s/[ABD]//;
 
-$out = `blastn -query $name/${name}_single_copy_variants.fa -db ../IWGSCR_chromosomes_fasta/$chromosome.fa -num_threads 48 -outfmt 6 -evalue 1e-10 -out $name/$name.ncbi_blast.out`;
+#Check if BLAST formatted chromosome exists already in the specified path
+if(-e $iwgscpath/$chromosome.fa.nin){}else {`formatdb -i $iwgscpath/$chromosome.fa -p F`;}
+
+$out = `blastn -query $name/${name}_single_copy_variants.fa -db $iwgscpath/$chromosome.fa -num_threads 48 -outfmt 6 -evalue 1e-10 -out $name/$name.ncbi_blast.out`;
 
 
 
