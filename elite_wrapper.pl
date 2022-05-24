@@ -5,7 +5,12 @@
 
 #File paths that need to be set up according to your local environment
 
+#The location of your wheat vcf files. They should be in the following folder and named as: chr1A.vcf, chr1B.vcf ... chr7D.vcf
 $vcfpath = "/home/bzglab/rdsf/elite_plus_watseq_raw_vcf/";
+
+#IWGSC chromosomes path
+$iwgsc = "/data2/gary/IWGSCR_chromosomes_fasta/";
+
 
 #This pipeline can either be given a specific chromosome to analyse as a single command line argument, e.g. 1A, otherwise it will work through all 21 (1A - 7D)
 $chr = 0;
@@ -84,7 +89,7 @@ if($section{3}>0)
   $chromosome = $name;
   $chromosome =~ s/chr//;
   #Check the path here points to a directory with the masked chromosome sequence file created above
-  $bwafile = "/data2/gary/IWGSCR_chromosomes_fasta/$chromosome.masked.fa";
+  $bwafile = "$iwgsc/$chromosome.masked.fa";
 
 
      `./create_masked_chromosome_sequence.pl $name`;
