@@ -92,7 +92,7 @@ if($section{3}>0)
   $bwafile = "$iwgsc/$chromosome.masked.fa";
 
 
-     `./create_masked_chromosome_sequence.pl $name`;
+     `./create_masked_chromosome_sequence.pl $name $iwgsc`;
       print "Creating bwa index of $bwafile\n";
       $done = "$bwafile.pac";
       if (-e $done){} else{`bwa index $bwafile`;}
