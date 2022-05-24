@@ -1,7 +1,12 @@
 #!/usr/bin/perl
 
-#Path to VCF files is supplied as a command line argument from the main wrapper here.
-$vcfpath = @ARGV[0];
+
+#The current chromosome to work on is provided as the first argument from the main pipeline.
+$chr = "$ARGV[0]";
+chomp $chr;
+
+#Path to VCF files is supplied as the second command line argument from the main wrapper here.
+$vcfpath = @ARGV[1];
 
 
 
@@ -23,10 +28,6 @@ while(<IN>){chomp; ($line, $hetrate) = split(/\t/,$_); $avoid{$line}++;}
 $n = keys %avoid;
 close IN;
 
-
-#The current chromosome to work on is provided as the sole argument from the main pipeline.
-$chr = "$ARGV[0]";
-chomp $chr;
 
 open(IN, "$path/$chr.vcf" ||die "Can't find any vcf file data in the path specified.");
 `mkdir $chr`;
