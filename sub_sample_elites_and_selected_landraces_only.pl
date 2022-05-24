@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
-#Substitute in the path to your own VCF files here.
-$path = "/home/bzglab/rdsf/elite_plus_watseq_raw_vcf/";
+#Path to VCF files is supplied as a command line argument from the main wrapper here.
+$vcfpath = @ARGV[0];
 
 
 
