@@ -3,7 +3,9 @@
 
 #Pipeline to identify the optimal set of SNP markers accross the wheat genome, starting with a set of VCF files called on skim sequencing mapped to the IWGSCv1 reference.
 
+#File paths that need to be set up according to your local environment
 
+$vcfpath = "/home/bzglab/rdsf/elite_plus_watseq_raw_vcf/";
 
 #This pipeline can either be given a specific chromosome to analyse as a single command line argument, e.g. 1A, otherwise it will work through all 21 (1A - 7D)
 $chr = 0;
@@ -51,7 +53,7 @@ if($section{1}>0)
 
    {
    print "Working on $name\nSub-sampling elites.";
-@out =  `./sub_sample_elites_and_selected_landraces_only.pl $name`;
+@out =  `./sub_sample_elites_and_selected_landraces_only.pl $name $vcfpath`;
 #Note this script checks for and includes core Watseq lines in core_watkins.txt but exludes all others.
 #It then looks for bad (high het vars identified with check_heterozygosity_rate.pl in file high_heterozygosity_lines.txt
 print "@out";
