@@ -78,6 +78,12 @@ if($section{3}>0)
 {
 
 #Prepare a version of the current chromosome with canonical SNP poistions and flanking regions masked with N's - to ensure any BWA mappings are to non-canonica$
+  $chromosome = $name;
+  $chromosome =~ s/chr//;
+  #Check the path here points to a directory with the masked chromosome sequence file created above
+  $bwafile = "/data2/gary/IWGSCR_chromosomes_fasta/$chromosome.masked.fa";
+
+
      `./create_masked_chromosome_sequence.pl $name`;
       print "Creating bwa index of $bwafile\n";
       $done = "$bwafile.pac";
@@ -85,10 +91,7 @@ if($section{3}>0)
 
 
   print "Running filter_out_high_copy_snps.pl $name\n";
-  $chromosome = $name;
-  $chromosome =~ s/chr//;
-  #Check the path here points to a directory with the masked chromosome sequence file created above
-  $bwafile = "/data2/gary/IWGSCR_chromosomes_fasta/$chromosome.masked.fa";
+
  
 
   
