@@ -9,7 +9,7 @@
 $vcfpath = "/home/bzglab/rdsf/elite_plus_watseq_raw_vcf/";
 
 #IWGSC chromosomes path
-$iwgsc = "/data2/gary/IWGSCR_chromosomes_fasta/";
+$iwgscpath = "/data2/gary/IWGSCR_chromosomes_fasta/";
 
 #List of files containing existing SNPs which must be included whether or not they pass filters - this is optional. The files should in the pw and be in this comma separated format:
 
@@ -102,10 +102,10 @@ if($section{3}>0)
   $chromosome = $name;
   $chromosome =~ s/chr//;
   #Check the path here points to a directory with the masked chromosome sequence file created above
-  $bwafile = "$iwgsc/$chromosome.masked.fa";
+  $bwafile = "$iwgscpath/$chromosome.masked.fa";
 
 
-     `./create_masked_chromosome_sequence.pl $name $iwgsc`;
+     `./create_masked_chromosome_sequence.pl $name $iwgscpath`;
       print "Creating bwa index of $bwafile\n";
       $done = "$bwafile.pac";
       if (-e $done){} else{`bwa index $bwafile`;}
@@ -137,12 +137,9 @@ if($section{4}>0)
 $chromosome =~ s/[ABD]//;
 
 #Check if BLAST formatted chromosome exists already in the specified path
-if(-e $iwgscpath/$chromosome.fa.nin){}else {`formatdb -i $iwgscpath/$chromosome.fa -p F`;}
+if(-e $iwgscpath/$chromosome.fa.nin){}else {`makeblastdb –in $iwgscpath/$chromosome.fa –dbtype nucl –parse_seqids`;}
 
 $out = `blastn -query $name/${name}_single_copy_variants.fa -db $iwgscpath/$chromosome.fa -num_threads 48 -outfmt 6 -evalue 1e-10 -out $name/$name.ncbi_blast.out`;
-
-
-
 
 print "$out";
 
