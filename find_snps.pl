@@ -164,7 +164,7 @@ print "$out";
 `rm $name/$name.*.sam`;
 `rm $name/$name.*.fa`;
 
-system("./create_affy_design_file.pl $name &");
+system("./create_affy_design_file.pl $name $iwgscpath $vcfpath &");
 }
 
 #Creates the file affy_designs_for_chrXX.txt which designs the flanking sequence for the probes and checks the number of times this
