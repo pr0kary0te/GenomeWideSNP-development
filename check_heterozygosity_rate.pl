@@ -1,20 +1,13 @@
 #!/usr/bin/perl
 
-$string = $ARGV[0];
-chomp $string;
-
-$vcfpath = $ARGV[1];
+$vcfpath = $ARGV[0];
 
 open(OUT, ">high_heterozygosity_lines.txt");
 
-
-if($string =~ /(chr[1-7][ABD])/){$chr = $1;} else{$chr = "*";}
-
-
-#Substitute in the path to the raw vcf files here
+#Get the line with the variety names - it is the 75th one in our vcf files but might be different in other analyses so check!
 $head = `head -75 $vcfpath/chr1A.vcf |tail -1`;
 chomp $head;
-print "$head\n";
+print "This should be a list of variety names from the CHR1A vcf file:\n$head\n";
 if($head !~ /\d/){die "Can't find any vcf file data in the path specified\n";}
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	
 
@@ -22,7 +15,7 @@ if($head !~ /\d/){die "Can't find any vcf file data in the path specified\n";}
 
 #print "First var in column is: $names[0]\n";
 
-@files = `ls $chr/binned_output/out_bin* |grep out_bin_`;
+@files = `ls */binned_output/out_bin* |grep out_bin_`;
 
 foreach $file(@files)
 {
