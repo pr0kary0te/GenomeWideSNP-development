@@ -2,6 +2,8 @@
 
 
 $chr = $ARGV[0];
+$iwgscpath = $ARGV[1];
+$vcfpath = $ARGV[2];
 chomp $chr;
 
 $leftflank = 100;
@@ -38,7 +40,7 @@ $sequence ="";
 
 $seqname = $chr; $seqname =~ s/chr//;
 
-open(CHR, "/data2/gary/IWGSCR_chromosomes_fasta/$seqname.fa");
+open(CHR, "/$iwgscpath/$seqname.fa");
 
 $head = <CHR>;
 #print "$head";
@@ -54,7 +56,7 @@ close CHR;
 
 open(VCF, ">$chr/$chr.selected_snps.vcf");
 print VCF "$header";
-open(IN, "/home/bzglab/rdsf/elite_plus_watseq_raw_vcf/$chr.vcf");
+open(IN, "$vcfpath/$chr.vcf");
 while(<IN>)
   {
   # chr1A	1569	chr1A_1569	G	A	 
