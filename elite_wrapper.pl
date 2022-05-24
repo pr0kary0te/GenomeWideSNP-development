@@ -19,7 +19,7 @@ $iwgsc = "/data2/gary/IWGSCR_chromosomes_fasta/";
 #chr1A,1340329,AX-95211874,TCCTTCCCTGTTAATTTACCGCATGTAAGCAACAC[G/T]GGCCCACCACCTCCTCCTAAC
 
 
-@files = ("dart-snps.csv","cerealsdb_SNPs_from_ensembl.txt","breeders-additional-markers.csv");
+@selectedSNPfiles = ("dart-snps.csv","cerealsdb_SNPs_from_ensembl.txt","breeders-additional-markers.csv");
 
 
 
@@ -84,7 +84,7 @@ if($section{2}>0)
  print "Filename $name/$name.vcf filtering by quality and pre-existing array presence: output is $name/$name.vcf.filtered\n";
 
 $file = "$name\$name.vcf";
-@out =  `./filter_snps_from_vcf.pl $file`;
+@out =  `./filter_snps_from_vcf.pl $file @selectedSNPfiles`;
 print "@out";
 
 `./convert_vcf_to_genotypes.pl $name/$name.vcf.filtered`;
