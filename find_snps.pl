@@ -174,7 +174,7 @@ system("./create_affy_design_file.pl $name $iwgscpath $vcfpath &");
 }
 }
 
-$out = `./check_heterozygosity_rate.pl`;
+$out = `./check_heterozygosity_rate.pl $vcfpath`;
 #Creates a new list of high heterozygoisty lines in case any new ones show up and need to be removed from the next iteration of this design process.
 
 #Finally run post_SNP_selection_summary2.pl manually, make a record of the results and then re-run this pipeline one or more times to re-design with SNPs which 
