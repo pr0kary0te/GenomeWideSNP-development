@@ -130,7 +130,7 @@ if($section{4}>0)
 #This script also exlcudes homopolymer-contianing probes.  Input is $name/$name.vcf.single_copy.genotypes";
 #Output is $name/${name}_single_copy_variants.fa");
 
-`./generate_fasta_of_single_copy_filtered_variants.pl $name`;
+`./generate_fasta_of_single_copy_filtered_variants.pl $name $iwgscpath`;
 #And then BLAST the resulting fasta against the corresponding IWGSC chromosome to check for the number of hits to the canonical chromosome.
 
 #Comment out the line below to blast against only the canonical chromosome, otherwise the blast will be to an alias file containing all three homeologs 
