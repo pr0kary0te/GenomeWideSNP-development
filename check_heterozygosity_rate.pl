@@ -3,6 +3,8 @@
 $string = $ARGV[0];
 chomp $string;
 
+$vcfpath = $ARGV[1];
+
 open(OUT, ">high_heterozygosity_lines.txt");
 
 
@@ -10,7 +12,7 @@ if($string =~ /(chr[1-7][ABD])/){$chr = $1;} else{$chr = "*";}
 
 
 #Substitute in the path to the raw vcf files here
-$head = `head -75 ~/rdsf/elite_plus_watseq_raw_vcf/chr1A.vcf |tail -1`;
+$head = `head -75 $vcfpath/chr1A.vcf |tail -1`;
 chomp $head;
 print "$head\n";
 if($head !~ /\d/){die "Can't find any vcf file data in the path specified\n";}
