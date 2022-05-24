@@ -11,6 +11,19 @@ $vcfpath = "/home/bzglab/rdsf/elite_plus_watseq_raw_vcf/";
 #IWGSC chromosomes path
 $iwgsc = "/data2/gary/IWGSCR_chromosomes_fasta/";
 
+#List of files containing existing SNPs which must be included whether or not they pass filters - this is optional. The files should in the pw and be in this comma separated format:
+
+#Chromosome (IWGSC v1),Position (IWGSC v1),35K_SNPId,Sequence
+#chr1A,1174865,AX-94493709,AGGAGTGATGTATCTGAAAATCTCGAGGGAGCTGA[A/G]ACCCAAGCTTCACAAGAACCTCCTGAGTTTCTGAA
+#chr1A,1236448,AX-94772289,GCTCGGTCGTCTTCGGCCTTGCGACCAAGCATGAT[C/T]TGGTGGATGGCAGGATGAAGAGGTGGTACCTCAGG
+#chr1A,1340329,AX-95211874,TCCTTCCCTGTTAATTTACCGCATGTAAGCAACAC[G/T]GGCCCACCACCTCCTCCTAAC
+
+
+@files = ("dart-snps.csv","cerealsdb_SNPs_from_ensembl.txt","breeders-additional-markers.csv");
+
+
+
+
 
 #This pipeline can either be given a specific chromosome to analyse as a single command line argument, e.g. 1A, otherwise it will work through all 21 (1A - 7D)
 $chr = 0;
