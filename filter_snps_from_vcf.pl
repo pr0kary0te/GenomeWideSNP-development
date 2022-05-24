@@ -3,8 +3,8 @@
 
 #First load poistions of SNPs from other sources and make sure these are selected at this first stage if they overlap.
 
+($chrfile, @selectedSNPfiles) = @ARGV;
 
-@files = ("dart-snps.csv","cerealsdb_SNPs_from_ensembl.txt","breeders-additional-markers.csv");
 
 #The format of these csv files should be as per the example in the first three lines shown here:
 
@@ -14,9 +14,9 @@
 
 
 
-foreach $file(@files)
+foreach $selectedSNPfile(@selectedSNPfiles)
 {
-open(IN, "$file");
+open(IN, "$selectedsnpfile");
 while(<IN>)
 {
 ($chr, $pos, @other) = split(/[\t\,]/, $_);
@@ -28,18 +28,11 @@ $selected{$combo}++;
 close IN;
 }
 
-
-
-
-
 $max_het_prop = 0.005;
 $min_maf = 0.01;
 $min_call_rate = 0.95;
 
-
-
-$file = $ARGV[0];
-chomp $file;
+chomp $chrfile;
 print "Incoming file name is $file\n";
 if($file =~ /(chr[1-7][ABDT]).vcf/){$name = $1; $file = "$name/$name.vcf"; } else{die "Unexpected file name $file\n";}
 
