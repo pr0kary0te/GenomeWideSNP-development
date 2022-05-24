@@ -4,7 +4,7 @@
 $max_threads = 48;
 
 #Example command line:  
-# ./get_num_resolved_per_bin_wrapped.pl chr1A/chr1A.ann.vcf
+# ./get_best_snps_in_bin.pl chr1A/chr1A.ann.vcf
 
 #Set the bin size within which to find the selected number of minimal markers
 $bin_size = 1500000;
@@ -86,7 +86,7 @@ print "range is $range bins $bins bin size is $bin_size\n";
         $threads = @files;
         if($threads >$max_threads){while($threads >$max_threads){ @files = `ls $dir/binned_output/bin*`; $threads = @files; sleep 10;}}     
    
-        system("./select_min_markers_max_iterations.pl $name/binned_output/bin_$bin.txt $min_maf $min_call_rate $max_iterations $resolution_cutoff&");
+        system("./select_min_markers.pl $name/binned_output/bin_$bin.txt $min_maf $min_call_rate $max_iterations $resolution_cutoff&");
         $bin++;
         open(OUT, ">$name/binned_output/bin_$bin.txt"); print OUT "$head";
        #if($jobs ==48){$jobs = 0; sleep 300;}  
@@ -98,7 +98,7 @@ print "range is $range bins $bins bin size is $bin_size\n";
    close OUT;
 
 #Cleanup the last file - which may be a smaller bin
-system("./select_min_markers_max_iterations.pl $name/binned_output/bin_$bin.txt 0.001 0.5 $max_iterations $resolution_cutoff");
+system("./select_min_markers.pl $name/binned_output/bin_$bin.txt 0.001 0.5 $max_iterations $resolution_cutoff");
 
 
 #`rm $file`;
