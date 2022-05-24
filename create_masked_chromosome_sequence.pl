@@ -6,7 +6,7 @@
 #match - given that their canonical position has been masked out. This will act as a high copy filter for potential SNPs.
 
 #Edit the path to the location of the IWGSC version 1.0 chromosomes.  This directory must be writable   
-$path = "/data2/gary/IWGSCR_chromosomes_fasta/";
+$path = $ARGV[0];
 
 
 $upstream = 10;
@@ -31,7 +31,7 @@ if(/^chr[1-7][ABD]_(\d+)\t/){$positions{$1}++;}
 close GEN;
 
 $chr =~ s/chr//;
-#Check the path here points to your IWGSC chromosome files
+
 open(CHR, "$path/$chr.fa");
 open(OUT, ">$path/$chr.masked.fa");
 
