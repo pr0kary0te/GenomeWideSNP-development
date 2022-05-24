@@ -31,8 +31,8 @@ $chromosomes{7}++;
 #Comment in or out sections to run: this will allow individual sections to be re-run with different parameters without starting from scratch.
 #If running for the first time, you would expect all sections to be activated by uncommenting them.
 
-#$section{1}++;  #Start from full vcf files and get the data only for the varieties we want
-#$section{2}++;  #Filter SNPs in the vcf file by quality and then convert these to the genotype format
+$section{1}++;  #Start from full vcf files and get the data only for the varieties we want
+$section{2}++;  #Filter SNPs in the vcf file by quality and then convert these to the genotype format
 $section{3}++;  #Filter by copy number using BWA mapping to just the canonical or to all homeologous chromosomes.
 $section{4}++;   #Do a BLAST search to check that no multi copy SNPs got through just because tehy were not a good enough match for BWA to pick up
 $section{5}++;   #Do final SNP calling.
@@ -62,6 +62,7 @@ print "@out";
 if($section{2}>0)
 {
  print "Filename $name/$name.vcf filtering by quality and pre-existing array presence: output is $name/$name.vcf.filtered\n";
+
 $file = "$name\$name.vcf";
 @out =  `./filter_snps_from_vcf.pl $file`;
 print "@out";
