@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-
+$path = "/data2/gary/IWGSCR_chromosomes_fasta";
 $name = $ARGV[0];
 chomp $name;
 
@@ -14,19 +14,11 @@ if(-e $filename){} else{
 `./generate_fasta_of_all_filtered_variants.pl $name`;
 }
 
-#Map the reads in the resulting FASTA file to the other two genomes first and remove any that match
-#E.g. map chr1A sequences to 1B and 1D in /data2/gary/IWGSCR_chromosomes_fasta/not_chr1A.fa
 
+#Map reads to the masked chromosome where the canonical SNP position is masked out with Ns. 
+`bwa mem $path/$chr$genome.masked.fa $name/${name}_filtered_variants.fa -t 32 >$name/${name}.bwa_mapped_to_$name.sam`;
 
-`bwa mem /data2/gary/IWGSCR_chromosomes_fasta/$chr$genome.masked.fa $name/${name}_filtered_variants.fa -t 32 >$name/${name}.bwa_mapped_to_$name.sam`;
-#Cleanup fasta file as no longer needed.
-#`rm $name/${name}_filtered_variants.fa`;
-#Now select single mapping reads only to exlude those hitting multiple locations in the same genome as the SNP
-
-#Get only lines with a single mapping (use with regular SAM genome mapping
-#@lines = `grep -v XA:Z $name/${name}.bwa_mapped_to_$name.sam`;
-
-#Or get lines with no matches at all if using a bwa index file which has been masked with Ns over the canonical SNP positions
+#Get lines with no matches at all if using a bwa index file which has been masked with Ns over the canonical SNP positions
 @lines = `grep AS:i:0 $name/${name}.bwa_mapped_to_$name.sam`;
 
 
@@ -48,6 +40,9 @@ print "$n single copy SNPs selected for $name\n";
 #`rm $name/${name}.bwa_mapped_to_not_$name.sam`;
 
 open(VCFIN, "$name/$name.vcf.filtered.genotypes");
+
+
+#Create a file of SNPs with no additional mappings (single copy).
 open(VCFOUT, ">$name/$name.vcf.single_copy.genotypes");
 $head = <VCFIN>;
 print VCFOUT "$head";
