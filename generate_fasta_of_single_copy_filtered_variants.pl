@@ -4,6 +4,8 @@
 $chr = $ARGV[0];
 chomp $chr;
 
+$iwgscpath = $ARGV[1];
+
 $left = 20;
 $right = 20;
 $length = $left+$right+1;
@@ -17,7 +19,7 @@ $sequence ="";
 $seqname = $chr; $seqname =~ s/chr//;
 
 #Check the path points to your IWGSC chromosomes
-open(CHR, "/data2/gary/IWGSCR_chromosomes_fasta/$seqname.fa");
+open(CHR, "$iwgscpath/$seqname.fa");
 
 $head = <CHR>;
 #print "$head";
