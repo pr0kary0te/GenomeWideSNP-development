@@ -5,17 +5,18 @@
 # The logic is that candidate SNPs and their flanking sequence can then be BWA mapped to this file, and any that have a match must have more than one genome
 #match - given that their canonical position has been masked out. This will act as a high copy filter for potential SNPs.
 
+
+#The chromosome to work on is specified in the command line as a single argument.
+$chr = "$ARGV[0]";
+
 #Edit the path to the location of the IWGSC version 1.0 chromosomes.  This directory must be writable   
-$path = $ARGV[0];
+$path = $ARGV[1];
 
 
 $upstream = 10;
 $length = 21;
 $string = "N" x 21;
 
-
-#The chromosome to work on is specified in the command line as a single argument.
-$chr = "$ARGV[0]";
 
 chomp $chr;
 
