@@ -154,7 +154,7 @@ if($section{5} >0)
 {
 
 
-$out = `./get_num_resolved_per_physical_bin_all_vars_wrapper.pl $name`;
+$out = `./get_best_snps_in_bin.pl $name`;
 print "$out";
 #`rm $name/$name.vcf.filtered`; 
 #`rm $name/$name.vcf.filtered.genotypes`;
