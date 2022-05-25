@@ -86,7 +86,7 @@ print "range is $range bins $bins bin size is $bin_size\n";
         $threads = @files;
         if($threads >$max_threads){while($threads >$max_threads){ @files = `ls $dir/binned_output/bin*`; $threads = @files; sleep 10;}}     
    
-        system("./select_min_markers.pl $name/binned_output/bin_$bin.txt $min_maf $min_call_rate $max_iterations $resolution_cutoff&");
+        system("./select_minimal_markers.pl $name/binned_output/bin_$bin.txt $min_maf $min_call_rate $max_iterations $resolution_cutoff&");
         $bin++;
         open(OUT, ">$name/binned_output/bin_$bin.txt"); print OUT "$head";
        #if($jobs ==48){$jobs = 0; sleep 300;}  
