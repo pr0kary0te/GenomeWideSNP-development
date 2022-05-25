@@ -44,18 +44,18 @@ Converts the vcf formatted SNPs passing the previous step into 0, 1, 2 coded cal
 
 
 <b>create_masked_chromosome_sequence.pl</b>
-Prepares a copy of the IWGSC fasta format chromosomes where all SNP positions that have passed filter up to this point are masked out with Ns 20 nucleotides up and downstream. This allows us to efficiently check for SNPs with multiple off-target locations using BWA mapping using the <b>filter_out_high_copy_snps.pl<b> script.
+Prepares a copy of the IWGSC fasta format chromosomes where all SNP positions that have passed filter up to this point are masked out with Ns 20 nucleotides up and downstream. This allows us to efficiently check for SNPs with multiple off-target locations using BWA mapping using the <b>filter_out_high_copy_snps.pl</b> script.
   
-generate_fasta_of_single_copy_filtered_variants.pl 
+<b>generate_fasta_of_single_copy_filtered_variants.pl</b> 
 This step makes a FASTA formatted file contianing every SNP flanking sequence passing filters up to this point.  This file is then BLASTed against the local IWGSC1.0 genome and any SNPs with multiple hits filtered out with <b>find_single_copy_snps_from_blast.pl</b> which also removes SNPs with low complexity flanking regions. 
 
-<b>get_best_snps_in_bin.pl</b> breaks the genome down into 1.5 Mb bins (by default) and uses the <b>select_minumal_markers.pl</b> script to identify the set of up to 6 SNPs (by default) that best discriminate all varieties within that bin. 
+<b>get_best_snps_in_bin.pl</b> breaks the genome down into 1.5 Mb bins (by default) and uses the <b>select_minumal_markers.pl</b> script to identify the set of up to 6 SNPs (by default) that best discriminate all varieties within that bin. Using annotation from the SnpEff step, the select_minimal_markers.pl script will give a four-fold weighting advantage to coding versus non-coding SNPs by default.  
   
 <b>create_affy_design_file.pl</b> gets the flanking sequence for SNPs selected in the previous step so they are ready to submit for array probe design.
 
 <b>check_heterozygosity_rate.pl</b> runs a post-run check on the heterozygosity rate of each variety based on the SNPs chosen by the pipleine. Any varieties with high heterozygoisty are written to the file <i>high_heterozygosity_lines.txt</i>.  If the pipline is then run again, varieties listed in this file will be excluded from the analysis. 
   
-  <b>annotate_results.pl</b> Generates some post run stats.
+<b>annotate_results.pl</b> Generates some post run stats.
 
 
 
