@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 
+$coding_advantage = 4;
 
 #Get the input file name from the command line - first argument:  e.g. ./select_minimal_markers.pl All_marker_data.txt
 $infile = $ARGV[0];
@@ -108,6 +109,7 @@ open(OUT, ">$infile");
 #The file format for the header is "Marker name -> Variety1 name-> Variety2 name-> Variety3 name...."
 $head = <IN>;
 ($id, @header) = split(/\t/, $head);
+$type = pop @header;
 $hlen = @header;
 
 
@@ -117,6 +119,9 @@ while(<IN>)
 {
 chomp;
 ($id, @data) = split(/\t/, $_);
+$type = pop @data;
+$id2type{$id}= $type;
+
 %alleles = ();
 if($blacklisted{$id} <1)
 {
@@ -276,6 +281,7 @@ $total_length = 0;
 while($pattern1 =~ /[012]/g){$total_length++;}
 while($pattern1 =~ /1/g){$hetcount++;}
 $newscore = int($score * (($total_length - ($hetcount * $het_weight)) / $total_length));
+if($id2type{$id} eq "p"){$newscore = $score * $coding_advantage;}
 #Stop search loop crashing too early if a marker with lots of  hets is encountered late in the run: only apply weighting if it doesn't result in a zero score:
 if($newscore >1){$score = $newscore;}
 
@@ -290,13 +296,15 @@ if($required{$id} >0){  $bestscore = $score;  %bestmatrix = %testmatrix;  $bestp
 
 
        $maf = $pattern2maf{$bestpattern}; $id = $pattern2id{$bestpattern}; 
-      if($bestscore >0)
+     $type = $id2type{$id};
+     if($type eq "p"){$bestscore = $bestscore/$coding_advantage;} 
+     if($bestscore >0)
          {
          $residual -= $bestscore;
          $resolved_percent = 100* ($matrix_size - $residual)/$matrix_size;
          
          #print "$bestscore\t$resolved_percent\t$id\t$maf\t$bestpattern\n"; 
-         print OUT "$bestscore\t$resolved_percent\t$id\t$bestpattern\n"; 
+         print OUT "$bestscore\t$resolved_percent\t$id\t$bestpattern\t$id2type{$id}\n"; 
          }
         $currentscore = $bestscore;
         if($iterations == $max_iterations || $resolved_percent >= $resolution_cutoff){$currentscore = 0;}
@@ -340,8 +348,3 @@ $x++;
 }
 return $score;
 }
-
-
-
-
-
