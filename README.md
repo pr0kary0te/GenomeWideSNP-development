@@ -2,9 +2,9 @@
 
 This repositary contains the PERL code used to process SNPs in vcf format from ~1000 wheat skim sequence lines to generate an optimal set of genome-wide SNP markers.  The motivation was to produce a novel Axiom genotyping array.
 
-The pipeline is mostly a set of PERL scripts, but we also use NCBI <b>BLAST+</b> (we used v2.6.0+) and the Burrows Wheeler aligner (we used <b>bwa</b> Version: 0.7.12-r1039). These need to be installed in your path, or alternatively update the scripts with an absoulte path to these tools. 
+The pipeline is mostly a set of PERL scripts, but we also use NCBI <b>BLAST+</b> (we used v2.6.0+) and the Burrows Wheeler aligner (we used <b>bwa</b> Version: 0.7.12-r1039). SnpEff is also required, we used version SnpEff 5.0 (build 2020-10-04 16:02), and this requires java. These need to be installed in your path, or alternatively update the scripts with an absoulte path to these tools. 
 
-The pipline is initiated by running <b>./find_snps.pl</b>, but  file you will need to edit this file first to update some key data paths to match your local environment before you will be ready to run this pipeline. 
+The pipline is initiated by running <b>./pipeline.pl</b>, but  file you will need to edit this file first to update some key data paths to match your local environment before you will be ready to run this pipeline. 
 
 The first is the <b>$vcfpath</b> variable with the path to the directory containing your vcfs.  These should be named in the format chr1A.vcf, chr1B.vcf etc through to chr7D.vcf.
 
@@ -19,14 +19,14 @@ chr1A,1340329,AX-95211874,TCCTTCCCTGTTAATTTACCGCATGTAAGCAACAC[G/T]GGCCCACCACCTCC
 
 The files are then listed in the @selectedSNPfiles array, which you can edit as appropriate.
 
-Finally, we added a list of core watkins landraces in our pipeline to include in the <i>core_watkins.txt</i> text file, which must be in the present working directory. There hshould be one watkins line listed on each line:
+Finally, we added a list of core watkins landraces in our pipeline to include in the <i>core_watkins.txt</i> text file, which must be in the present working directory. There should be one watkins line listed on each line:
 WATDE0001
 WATDE0002
 etc..
 
 
 
-The find_snps.pl pipeline will run the following steps:
+<b>pipeline.pl</b> will run the following steps:
 
 <b>sub_sample_elites_and_selected_landraces_only.pl</b>
 This makes a copy of the original vcfs with call only for named elite lines (those not from the Watkins collection - named WAT*) along with core Watkins lines listed in (core_watkins.txt)</i>. The logic here was to balance the number of modern cultivars used for SNP selection against the much higher number of landraces available, to prevent ascertainment bias. Including some landraces is good as these will contain rare alleles which breeders will wish to bring into cultivars over time, but there is a balance to be struck with an array that will work well with existing cultivars. Note that the script refers so a file called "<i>high_heterozygosity_lines.txt</i>".  You don't need to supply this: it will be generated automatically the first time you run the pipeline.  Once you have run the pipleine, re-run it and any line identified as high heterozygosity in the first pass will be excluded in the second (they will be listed in the file so you will know which ones they were).
@@ -36,6 +36,7 @@ SNP rows are selected only where they meet the criteria specified in the script:
 $max_het_prop = 0.005; (maximum proportion of varieties with heterozygous calls)
 $min_maf = 0.01; (minumum Minor allele Frequency)
 $min_call_rate = 0.95; (minimum proportion of varieties with a valid hom or het call.
+This script also adds SnpEff annotation to the vcfs if it is not already present.
 
 
 <b>convert_vcf_to_genotypes.pl</b>
@@ -52,14 +53,12 @@ This step makes a FASTA formatted file contianing every SNP flanking sequence pa
   
 <b>create_affy_design_file.pl</b> gets the flanking sequence for SNPs selected in the previous step so they are ready to submit for array probe design.
 
-  <b>check_heterozygosity_rate.pl</b> runs a post-run check on the heterozygosity rate of each variety based on the SNPs chosen by the pipleine. Any varieties with high heterozygoisty are written to the file xxx
-annotate_results.pl
+<b>check_heterozygosity_rate.pl</b> runs a post-run check on the heterozygosity rate of each variety based on the SNPs chosen by the pipleine. Any varieties with high heterozygoisty are written to the file <i>high_heterozygosity_lines.txt</i>.  If the pipline is then run again, varieties listed in this file will be excluded from the analysis. 
+  
+  <b>annotate_results.pl</b> Generates some post run stats.
 
 
 
 
-The next file to edit will be <b>filter_snps_from_vcf.pl</b>. In this file, we supplied three files with SNPs which were to be forced to pass the initial filters if they were found to overlap with any SNPs in the skim sequenced vcfs (we know they are good SNPs if they are present on existing arrays after all). This is important because we are definitely going to include these legacy SNPs on the new array, so we want to make sure that the newly dsigned ones are designed to work around these as well as possible - to removed redundancy. For us, these files were: <i>dart-snps.csv, cerealsdb_SNPs_from_ensembl.txt</i> and <i>breeders-additional-markers.csv</i>. You could combine these into one or add more files: just update the file list accordingly.  This step also optionally adds snpEff annotation to SNPs and this will need to be available and its path correctly specified on line 122. 
-
-<b>create_masked_chromosome_sequence.pl</b> to provide it with a path to a local copy of the IWGSC v1.0 chromosome sequences in FASTA format. These shoud appear as $path/1A.fa, $path/1B.fa etc.  Edit the path in the $path variable and rename the chromosomes if necessary. Note that the $path directory needs to be user writable.  The purpose of this script is to make a copy of each chromosome with the canonical position of every filtered SNP masked out with N's in its flanking region. Any SNPs which then map to these masked chromosomes using bwa must have a highly similar flanking sequence in more than one chromosome location, and they will be filtered out as high copy.  
 
 
