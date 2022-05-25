@@ -98,7 +98,7 @@ print "range is $range bins $bins bin size is $bin_size\n";
    close OUT;
 
 #Cleanup the last file - which may be a smaller bin
-system("./select_min_markers.pl $name/binned_output/bin_$bin.txt 0.001 0.5 $max_iterations $resolution_cutoff");
+system("./select_minimal_markers.pl $name/binned_output/bin_$bin.txt 0.001 0.5 $max_iterations $resolution_cutoff");
 
 
 #`rm $file`;
