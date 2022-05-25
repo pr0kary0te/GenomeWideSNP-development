@@ -10,24 +10,49 @@ The first is the <b>$vcfpath</b> variable with the path to the directory contain
 
 The second is the <b>$iwgscpath</b> variable which contains the name of the directory containing the IWGSC1.0 chromosomes in fasta format, named 1A.fa, 1B.fa etc through to 7D.fa
 
-We added a list of core watkins landraces in our pipeline to include <i>
-The find_snps.pl pipeline will run th efollowing steps:
+You can supply an optional list of files containing existing SNPs which must be included whether or not they pass filters. The files should in the present working directory and be in this comma separated format:
+
+Chromosome (IWGSC v1),Position (IWGSC v1),35K_SNPId,Sequence
+chr1A,1174865,AX-94493709,AGGAGTGATGTATCTGAAAATCTCGAGGGAGCTGA[A/G]ACCCAAGCTTCACAAGAACCTCCTGAGTTTCTGAA
+chr1A,1236448,AX-94772289,GCTCGGTCGTCTTCGGCCTTGCGACCAAGCATGAT[C/T]TGGTGGATGGCAGGATGAAGAGGTGGTACCTCAGG
+chr1A,1340329,AX-95211874,TCCTTCCCTGTTAATTTACCGCATGTAAGCAACAC[G/T]GGCCCACCACCTCCTCCTAAC
+
+The files are then listed in the @selectedSNPfiles array, which you can edit as appropriate.
+
+Finally, we added a list of core watkins landraces in our pipeline to include in the <i>core_watkins.txt</i> text file, which must be in the present working directory. There hshould be one watkins line listed on each line:
+WATDE0001
+WATDE0002
+etc..
+
+
+
+The find_snps.pl pipeline will run the following steps:
 
 <b>sub_sample_elites_and_selected_landraces_only.pl</b>
-This makes a copy of the original vcfs with call only for named elite lines (those not from the Watkins collection - named WAT*) along with core Watkins lines listed in (core_watkins.txt)</i>. The logic here was to balance the number of modern cultivars used for SNP selection against the much higher number of landraces available, to prevent ascertainment bias. Including some landraces is good as these will contain rare alleles which breeders will wish to bring into cultivars over time, but there is a balance to be struck with an array that will work well with existing cultivars. Note that the script refers so a file called "<i>high_heterozygosity_lines.txt</i>".  You don't need to supply this: it will be generated automatically the first time you run the pipeline.  Once you have run the pipleine, re-run it and any line identified as high heterozygosity in the first pass will be excluded in the second (they will be listed in the file so you will know which ones they were). 
+This makes a copy of the original vcfs with call only for named elite lines (those not from the Watkins collection - named WAT*) along with core Watkins lines listed in (core_watkins.txt)</i>. The logic here was to balance the number of modern cultivars used for SNP selection against the much higher number of landraces available, to prevent ascertainment bias. Including some landraces is good as these will contain rare alleles which breeders will wish to bring into cultivars over time, but there is a balance to be struck with an array that will work well with existing cultivars. Note that the script refers so a file called "<i>high_heterozygosity_lines.txt</i>".  You don't need to supply this: it will be generated automatically the first time you run the pipeline.  Once you have run the pipleine, re-run it and any line identified as high heterozygosity in the first pass will be excluded in the second (they will be listed in the file so you will know which ones they were).
 
 <b>filter_snps_from_vcf.pl</b>
+SNP rows are selected only where they meet the criteria specified in the script:
+$max_het_prop = 0.005; (maximum proportion of varieties with heterozygous calls)
+$min_maf = 0.01; (minumum Minor allele Frequency)
+$min_call_rate = 0.95; (minimum proportion of varieties with a valid hom or het call.
+
 
 <b>convert_vcf_to_genotypes.pl</b>
+Converts the vcf formatted SNPs passing the previous step into 0, 1, 2 coded calls for downstream analysis
+
 
 <b>create_masked_chromosome_sequence.pl</b>
-filter_out_high_copy_snps.pl
+Prepares a copy of the IWGSC fasta format chromosomes where all SNP positions that have passed filter up to this point are masked out with Ns 20 nucleotides up and downstream. This allows us to efficiently check for SNPs with multiple off-target locations using BWA mapping using the <b>filter_out_high_copy_snps.pl<b> script.
+  
 generate_fasta_of_single_copy_filtered_variants.pl 
-Run NCBI BLAST
-find_single_copy_snps_from_blast.pl
-get_best_snps_in_bin.pl (This runs select_minimal_markers.pl on 1.5 MB bins)
-create_affy_design_file.pl
-check_heterozygosity_rate.pl
+This step makes a FASTA formatted file contianing every SNP flanking sequence passing filters up to this point.  This file is then BLASTed against the local IWGSC1.0 genome and any SNPs with multiple hits filtered out with <b>find_single_copy_snps_from_blast.pl</b> which also removes SNPs with low complexity flanking regions. 
+
+<b>get_best_snps_in_bin.pl</b> breaks the genome down into 1.5 Mb bins (by default) and uses the <b>select_minumal_markers.pl</b> script to identify the set of up to 6 SNPs (by default) that best discriminate all varieties within that bin. 
+  
+<b>create_affy_design_file.pl</b> gets the flanking sequence for SNPs selected in the previous step so they are ready to submit for array probe design.
+
+  <b>check_heterozygosity_rate.pl</b> runs a post-run check on the heterozygosity rate of each variety based on the SNPs chosen by the pipleine. Any varieties with high heterozygoisty are written to the file xxx
 annotate_results.pl
 
 
