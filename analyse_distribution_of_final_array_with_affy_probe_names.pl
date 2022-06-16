@@ -7,8 +7,7 @@ $minmaf = 0.01;
 $bins = 20;
 
 #Specify the input file on the command line as the single argument.  This can be comma or tab delimited.
-#The first three columns must be the axiomID, chromosome, and position and the last column must be the MAF score, with any number of SNP data columns in between.
-#Only the specified four columns are used - the SNP calls are not used here, only the MAF score. 
+#The first four columns must be the axiomID, chromosome, position and MAF score. Any number of data columns can follow with SNP calls: these are not used. 
 $file = $ARGV[0];
 chomp $file;
 
@@ -19,8 +18,8 @@ open(OUT, ">final_snp_distribution_${file}min_maf-$minmaf.txt");
 while(<IN>)
 {
 chomp;
-($id, $chr, $pos, @other) = split(/[\t\,]/);
-$maf = $other[$#other];
+($id, $chr, $pos, $maf, @other) = split(/[\t\,]/);
+
 if($chr =~ /[1-7][ABD]/ && $pos =~ /^\d+$/ && $maf >= $minmaf){$matrix{$chr}{$pos}++; $used_probes++; if($pos > $max{$chr}){$max{$chr} = $pos;}}
 }
 close IN;
