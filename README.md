@@ -59,6 +59,7 @@ This step makes a FASTA formatted file contianing every SNP flanking sequence pa
 
 
 <b>Post design analysis of Axiom array data</b>
+
 <b>analyse_distribution_of_final_array_with_affy_probe_names.pl</b> was used to analyse the spatial distribution of Axiom probes passing a minumal minor allele frequency(MAF) filter of 1% and a default of 20 bins per chromosome.  
 
 
