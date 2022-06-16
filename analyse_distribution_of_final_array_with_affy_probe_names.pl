@@ -1,7 +1,14 @@
 #!/usr/bin/perl
 
+#Set a minimum MAF score to consider as a real polymorphic marker 
 $minmaf = 0.01;
+
+#Set the number of bins you want each chromosome to be broken down into for this analysis (default is 20).
 $bins = 20;
+
+#Specify the input file on the command line as the single argument.  This can be comma or tab delimited.
+#The first three columns must be the axiomID, chromosome, and position and the last column must be the MAF score, with any number of SNP data columns in between.
+#Only the specified four columns are used - the SNP calls are not used here, only the MAF score. 
 $file = $ARGV[0];
 chomp $file;
 
