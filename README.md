@@ -62,5 +62,5 @@ This step makes a FASTA formatted file contianing every SNP flanking sequence pa
 
 <b>analyse_distribution_of_final_array_with_affy_probe_names.pl</b> was used to analyse the spatial distribution of Axiom probes passing a minumal minor allele frequency(MAF) filter of 1% and a default of 20 bins per chromosome.  
 
-
+<b>create_common_variety_datasets.pl</b> Using ./create_common_variety_datasets.pl axiomfile1.csv axiomfile2.csv will look for shared varieties in the headers of both files and write outputs for each containing only data for varieties common to both datasets.
 
